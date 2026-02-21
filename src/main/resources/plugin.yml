@@ -1,0 +1,18 @@
+name: HealPlugin
+version: "1.0.0"
+main: de.heal.HealPlugin
+api-version: "1.21"
+description: "Adds the /heal command that requires OP to use."
+authors: [Fellinara]
+
+commands:
+  heal:
+    description: "Heals yourself or another player (OP only)."
+    usage: "/<command> [player]"
+    permission: "heal.use"
+    permission-message: "§cYou need to be an OP to use /heal."
+
+permissions:
+  heal.use:
+    description: "Allows using the /heal command."
+    default: op
