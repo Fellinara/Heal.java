@@ -16,11 +16,25 @@ Der Befehl ist auf **OPs** beschränkt (Permission `heal.use`, Standard: OP).
 
 ## Plugin bauen (JAR erstellen)
 
+### ✅ Option 1 – GitHub Actions (kein Tool nötig, empfohlen)
+
+Du brauchst **gar nichts** zu installieren – GitHub baut das Plugin automatisch für dich!
+
+1. Gehe auf GitHub zu deinem Repository.
+2. Klicke oben auf den Tab **Actions**.
+3. Wähle den Workflow **„Build HealPlugin"** aus und klicke auf den letzten Run.
+4. Scrolle unten zu **Artifacts** und klicke auf **HealPlugin**, um die ZIP-Datei herunterzuladen.
+5. ZIP entpacken → `HealPlugin-1.0.0.jar` liegt darin.
+
+> Der Workflow läuft automatisch bei jedem Push in das Repository.
+
+---
+
+### Option 2 – Kommandozeile (lokal)
+
 Du brauchst:
 - **Java 21** (JDK) → [adoptium.net](https://adoptium.net/)
 - **Apache Maven 3.8+** → [maven.apache.org](https://maven.apache.org/download.cgi)
-
-### Option 1 – Kommandozeile (empfohlen)
 
 ```bash
 # 1. In den Projektordner wechseln
@@ -35,15 +49,6 @@ mvn clean package
 
 Die fertige Datei `HealPlugin-1.0.0.jar` aus dem `target/`-Ordner in den  
 `plugins/`-Ordner deines Paper-Servers kopieren und den Server (neu) starten.
-
----
-
-### Option 2 – IntelliJ IDEA
-
-1. **IntelliJ IDEA** starten → *File → Open* → den Projektordner (`Heal.java`) öffnen.
-2. IntelliJ erkennt das Maven-Projekt automatisch und lädt die Abhängigkeiten.
-3. Rechts im **Maven**-Panel: `HealPlugin → Lifecycle → package` per Doppelklick ausführen.
-4. Die fertige JAR liegt in `target/HealPlugin-1.0.0.jar`.
 
 ---
 
