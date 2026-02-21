@@ -20,13 +20,28 @@ Der Befehl ist auf **OPs** beschränkt (Permission `heal.use`, Standard: OP).
 
 Du brauchst **gar nichts** zu installieren – GitHub baut das Plugin automatisch für dich!
 
-1. Gehe auf GitHub zu deinem Repository.
-2. Klicke oben auf den Tab **Actions**.
-3. Wähle den Workflow **„Build HealPlugin"** aus und klicke auf den letzten Run.
-4. Scrolle unten zu **Artifacts** und klicke auf **HealPlugin**, um die ZIP-Datei herunterzuladen.
-5. ZIP entpacken → `HealPlugin-1.0.0.jar` liegt darin.
+#### Schritt 1 – Workflow genehmigen (einmalig, nur beim ersten Mal nötig)
 
-> Der Workflow läuft automatisch bei jedem Push in das Repository.
+Da der Workflow über einen Pull Request hinzugefügt wurde, muss er einmalig freigegeben werden:
+
+1. Gehe zu **Actions** in deinem Repository.
+2. Klicke links auf **„Build HealPlugin"**.
+3. Falls ein gelber Banner **„This workflow requires approval"** erscheint → klicke auf **„Approve and run"**.
+
+#### Schritt 2 – Build manuell starten
+
+1. Gehe zu **Actions** → **„Build HealPlugin"**.
+2. Klicke rechts auf den Button **„Run workflow"** → dann auf den grünen **„Run workflow"**-Button.
+3. Warte ~1–2 Minuten, bis der grüne ✅ erscheint.
+
+#### Schritt 3 – JAR herunterladen
+
+1. Klicke auf den abgeschlossenen Run.
+2. Scrolle unten zu **Artifacts**.
+3. Klicke auf **HealPlugin** → ZIP-Datei wird heruntergeladen.
+4. ZIP entpacken → **`HealPlugin-1.0.0.jar`** liegt darin.
+
+> Nach der ersten Freigabe läuft der Workflow automatisch bei jedem weiteren Push.
 
 ---
 
