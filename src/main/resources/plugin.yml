@@ -1,0 +1,17 @@
+name: HealPlugin
+version: ${project.version}
+main: de.fellinara.healplugin.HealPlugin
+api-version: "1.21"
+description: A simple plugin that adds a /heal command (OP required).
+author: Fellinara
+
+commands:
+  heal:
+    description: Heals the player to full health. Requires OP.
+    usage: /heal
+    permission: healplugin.heal
+
+permissions:
+  healplugin.heal:
+    description: Allows the player to use the /heal command.
+    default: op
