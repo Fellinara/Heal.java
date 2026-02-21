@@ -1,0 +1,6 @@
+name: HealPlugin
+version: '1.0.0'
+main: de.fillinara.healplugin.HealPlugin
+api-version: '1.20'
+description: Custom combat plugin for Fillinara
+authors: [ Fillinara ]
