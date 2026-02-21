@@ -26,7 +26,7 @@ import java.util.UUID;
 
 public class FillinaraListener implements Listener {
 
-    private static final String TARGET = "Fillinara";
+    private static final String TARGET = FillinaraRules.TARGET_NAME;
 
     private final HealPlugin plugin;
     private final Set<UUID> healCooldown = new HashSet<>();
@@ -43,7 +43,7 @@ public class FillinaraListener implements Listener {
         // Feature 1: Fillinara deals +1 HP (0.5 hearts) more damage
         if (event.getDamager() instanceof Player damager
                 && damager.getName().equalsIgnoreCase(TARGET)) {
-            event.setDamage(event.getDamage() + 1.0);
+            event.setDamage(FillinaraRules.applyDamageBonus(event.getDamage()));
         }
 
         // Feature 5: Reduce shield cooldown from 100 ticks (5s) to 80 ticks (4s) after axe hit
@@ -54,8 +54,8 @@ public class FillinaraListener implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (victim.isOnline() && victim.getCooldown(Material.SHIELD) > 80) {
-                        victim.setCooldown(Material.SHIELD, 80);
+                    if (victim.isOnline() && victim.getCooldown(Material.SHIELD) > FillinaraRules.SHIELD_COOLDOWN_TICKS) {
+                        victim.setCooldown(Material.SHIELD, FillinaraRules.SHIELD_COOLDOWN_TICKS);
                     }
                 }
             }.runTaskLater(plugin, 1L);
@@ -72,28 +72,29 @@ public class FillinaraListener implements Listener {
 
         // Feature 2: Subtract 1 HP (0.5 hearts) from incoming base damage
         double baseDamage = event.getDamage();
-        if (baseDamage <= 1.0) {
+        double reduced = FillinaraRules.applyDamageReduction(baseDamage);
+        if (reduced < 0) {
             event.setCancelled(true);
             return;
         }
-        event.setDamage(baseDamage - 1.0);
+        event.setDamage(reduced);
 
         // Feature 3: Auto-heal to 4 hearts when health drops to 1 heart or below
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (!player.isOnline() || player.isDead()) return;
-                if (player.getHealth() <= 2.0
+                if (player.getHealth() <= FillinaraRules.AUTO_HEAL_THRESHOLD
                         && !healCooldown.contains(player.getUniqueId())) {
-                    player.setHealth(8.0); // 4 hearts = 8 HP
+                    player.setHealth(FillinaraRules.AUTO_HEAL_AMOUNT);
                     healCooldown.add(player.getUniqueId());
-                    // Remove cooldown after 3 seconds (60 ticks)
+                    // Remove cooldown after 3 seconds
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             healCooldown.remove(player.getUniqueId());
                         }
-                    }.runTaskLater(plugin, 60L);
+                    }.runTaskLater(plugin, FillinaraRules.AUTO_HEAL_COOLDOWN_TICKS);
                 }
             }
         }.runTaskLater(plugin, 1L);
@@ -140,19 +141,14 @@ public class FillinaraListener implements Listener {
 
         if (bonusDurability <= 0) return;
 
-        int dmg = event.getDamage();
-        if (dmg <= bonusDurability) {
-            // Absorb all damage with bonus pool
-            meta.getPersistentDataContainer()
-                    .set(bonusDurabilityKey, PersistentDataType.INTEGER, bonusDurability - dmg);
-            item.setItemMeta(meta);
+        int[] result = FillinaraRules.absorbBonusDurability(bonusDurability, event.getDamage());
+        meta.getPersistentDataContainer()
+                .set(bonusDurabilityKey, PersistentDataType.INTEGER, result[0]);
+        item.setItemMeta(meta);
+        if (result[1] == 0) {
             event.setCancelled(true);
         } else {
-            // Exhaust bonus pool and apply remaining damage
-            meta.getPersistentDataContainer()
-                    .set(bonusDurabilityKey, PersistentDataType.INTEGER, 0);
-            item.setItemMeta(meta);
-            event.setDamage(dmg - bonusDurability);
+            event.setDamage(result[1]);
         }
     }
 
@@ -167,7 +163,7 @@ public class FillinaraListener implements Listener {
         attr.addModifier(new AttributeModifier(
                 modifierUUID,
                 "fillinara_attack_speed",
-                2.0,
+                FillinaraRules.ATTACK_SPEED_BONUS,
                 AttributeModifier.Operation.ADD_NUMBER
         ));
     }
@@ -179,9 +175,9 @@ public class FillinaraListener implements Listener {
                 if (meta == null) continue;
                 int existing = meta.getPersistentDataContainer()
                         .getOrDefault(bonusDurabilityKey, PersistentDataType.INTEGER, 0);
-                if (existing < 100) {
+                if (existing < FillinaraRules.BONUS_DURABILITY) {
                     meta.getPersistentDataContainer()
-                            .set(bonusDurabilityKey, PersistentDataType.INTEGER, 100);
+                            .set(bonusDurabilityKey, PersistentDataType.INTEGER, FillinaraRules.BONUS_DURABILITY);
                     item.setItemMeta(meta);
                 }
             }
