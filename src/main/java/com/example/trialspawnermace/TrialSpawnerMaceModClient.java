@@ -13,6 +13,8 @@ import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Comparator;
 import java.util.List;
@@ -30,6 +32,9 @@ import java.util.List;
  */
 @Environment(EnvType.CLIENT)
 public class TrialSpawnerMaceModClient implements ClientModInitializer {
+
+	private static final String MOD_ID = "trial-spawner-mace";
+	private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	/** Radius (in blocks) to search for Heavy Core item entities. */
 	private static final double SEARCH_RADIUS = 16.0;
@@ -73,7 +78,7 @@ public class TrialSpawnerMaceModClient implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(this::onTick);
 
-		TrialSpawnerMaceMod.LOGGER.info("Trial Spawner Mace Helper initialized – press H to toggle.");
+		LOGGER.info("Trial Spawner Mace Helper initialized – press H to toggle.");
 	}
 
 	// --------------------------------------------------------------------- //

@@ -22,10 +22,41 @@ collected without manual effort.
 
 | Requirement        | Version        |
 |--------------------|----------------|
-| Minecraft          | 1.21.1         |
+| Minecraft          | **1.21.1 or newer** (1.21.x) |
 | Fabric Loader      | ≥ 0.16.0       |
-| Fabric API         | 0.102.0+1.21.1 |
+| Fabric API         | for your Minecraft version (see below) |
 | Java               | 21             |
+
+> ⚠️ **Fabric API is required.** Download it from
+> [Modrinth](https://modrinth.com/mod/fabric-api) – choose the version that
+> matches your Minecraft version and put it in your `mods/` folder.
+
+## Troubleshooting — Minecraft won't start
+
+If Minecraft shows a "mod compatibility" error or simply won't open after
+installing this mod, work through this checklist:
+
+1. **Check your Minecraft version.**
+   Open the Minecraft Launcher → Installations → make sure the profile uses
+   **Fabric 1.21.1** (or a newer 1.21.x Fabric profile).
+
+2. **Make sure Fabric Loader is installed.**
+   Download the Fabric installer from [fabricmc.net](https://fabricmc.net/use/)
+   and run it for your Minecraft version.
+
+3. **Make sure Fabric API is in your `mods/` folder.**
+   The mod depends on Fabric API. Without it, Fabric will show a
+   "missing dependency" error screen.
+   Download it from [Modrinth – fabric-api](https://modrinth.com/mod/fabric-api)
+   and pick the version matching your Minecraft version.
+
+4. **Only one mod JAR in `mods/`.**
+   Make sure you placed only `trial-spawner-mace-1.0.0.jar` and `fabric-api-*.jar`
+   in the mods folder, not the `-sources.jar` file.
+
+5. **Java 21 required.**
+   Minecraft 1.21.1 requires Java 21. The Fabric Installer usually sets this
+   automatically.
 
 ## Download the mod JAR (recommended)
 
