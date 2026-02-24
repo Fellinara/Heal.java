@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "trial-spawner-mace",
+  "version": "${version}",
+  "name": "Trial Spawner Mace Helper",
+  "description": "Automatically picks up Heavy Core items from Ominous Trial Spawners. Client-side only – no server mod required.",
+  "authors": [
+    "Fellinara"
+  ],
+  "contact": {
+    "sources": "https://github.com/Fellinara/Heal.java"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      "com.example.trialspawnermace.TrialSpawnerMaceMod"
+    ],
+    "client": [
+      "com.example.trialspawnermace.TrialSpawnerMaceModClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "fabric-api": "*",
+    "minecraft": "~1.21.1",
+    "java": ">=21"
+  }
+}
