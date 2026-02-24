@@ -13,9 +13,6 @@
   "license": "MIT",
   "environment": "client",
   "entrypoints": {
-    "main": [
-      "com.example.trialspawnermace.TrialSpawnerMaceMod"
-    ],
     "client": [
       "com.example.trialspawnermace.TrialSpawnerMaceModClient"
     ]
@@ -23,7 +20,7 @@
   "depends": {
     "fabricloader": ">=0.16.0",
     "fabric-api": "*",
-    "minecraft": "~1.21.1",
+    "minecraft": ">=1.21.1 <1.22",
     "java": ">=21"
   }
 }
