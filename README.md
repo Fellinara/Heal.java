@@ -27,15 +27,27 @@ collected without manual effort.
 | Fabric API         | 0.102.0+1.21.1 |
 | Java               | 21             |
 
+## Download the mod JAR (recommended)
+
+Every push to this repository automatically builds the mod and makes the JAR
+available for download via GitHub Actions — **no Java or Gradle installation
+needed**.
+
+1. Click the **Actions** tab at the top of this GitHub page.
+2. Click the latest successful **"Build & Upload Mod JAR"** run (green ✓).
+3. Scroll down to the **Artifacts** section at the bottom of the run page.
+4. Click **`trial-spawner-mace-mod`** to download a `.zip` file.
+5. Extract the `.zip` — inside you will find `trial-spawner-mace-1.0.0.jar`.
+6. Place that `.jar` in your Minecraft `mods/` folder.
+
 ## Installation
 
 1. Install [Fabric Loader](https://fabricmc.net/use/) for Minecraft 1.21.1.
 2. Download [Fabric API](https://modrinth.com/mod/fabric-api) and place it in
    your `mods/` folder.
-3. Build the mod (see below) or download a pre-built jar, then place it in your
-   `mods/` folder.
+3. Download the mod JAR as described above and place it in your `mods/` folder.
 
-## Building from source
+## Building from source (optional)
 
 ```bash
 # Linux / macOS
@@ -48,8 +60,8 @@ gradlew.bat build
 
 The built jar will be in `build/libs/`.
 
-> **Note:** The first build will download the Gradle wrapper jar automatically.
-> Make sure you have an internet connection.
+> **Note:** The first build will download all dependencies automatically.
+> Make sure you have an internet connection and Java 21 installed.
 
 ## Usage
 
