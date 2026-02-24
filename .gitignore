@@ -1,0 +1,21 @@
+# Gradle build output
+build/
+.gradle/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.classpath
+*.project
+.settings/
+
+# Fabric-loom cache
+.cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Compiled output
+out/
