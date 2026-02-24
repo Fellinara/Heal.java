@@ -40,13 +40,25 @@ public class TrialSpawnerMaceModClient implements ClientModInitializer {
 	 */
 	private static final double PICKUP_DIST_SQ = 1.0 * 1.0;
 
-	/** Maximum acceleration applied per tick toward the target (blocks/tick²). */
-	private static final double MOVE_SPEED = 0.25;
+	/**
+	 * Maximum horizontal speed when moving toward the item (blocks/tick).
+	 * Matches vanilla walking speed (~0.13 b/t) so the server never flags
+	 * the movement as illegal – preventing ReadTimeoutException disconnects.
+	 */
+	private static final double WALK_SPEED = 0.13;
+
+	/**
+	 * How many ticks to wait between velocity nudges.
+	 * 4 ticks = 5 Hz – reduces position-packet rate without losing responsiveness.
+	 */
+	private static final int NUDGE_INTERVAL = 4;
 
 	private static final String KEYBIND_CATEGORY = "key.categories.trial-spawner-mace";
 	private static final String KEYBIND_TOGGLE   = "key.trial-spawner-mace.toggle";
 
 	private boolean enabled = true;
+	/** Bounded tick counter: 0 … NUDGE_INTERVAL-1, wraps without overflow. */
+	private int tickCount = 0;
 
 	private KeyBinding toggleKey;
 
@@ -84,6 +96,11 @@ public class TrialSpawnerMaceModClient implements ClientModInitializer {
 		// Do not interfere while a screen (inventory, chat, …) is open
 		if (client.currentScreen != null) return;
 
+		// Throttle: only nudge every NUDGE_INTERVAL ticks to keep position-packet
+		// rate low and avoid server-side movement detection.
+		tickCount = (tickCount + 1) % NUDGE_INTERVAL;
+		if (tickCount != 0) return;
+
 		// Find all Heavy Core item entities within the search radius
 		List<ItemEntity> candidates = client.world.getEntitiesByClass(
 				ItemEntity.class,
@@ -113,14 +130,18 @@ public class TrialSpawnerMaceModClient implements ClientModInitializer {
 		}
 
 		double dist = Math.sqrt(distSq);
-		double accel = Math.min(MOVE_SPEED, dist * 0.5);
+		// Slow down when close to avoid overshooting; cap at walking speed so the
+		// server never flags the movement as a speed hack (prevents ReadTimeoutException).
+		double speed = Math.min(WALK_SPEED, dist * 0.2);
 
-		// Nudge the player toward the item without fully overriding their input,
-		// so normal movement and gravity still work naturally.
-		client.player.addVelocity(
-				dx / dist * accel,
-				0.0,
-				dz / dist * accel
+		// Set horizontal velocity toward the item; preserve vertical velocity so
+		// gravity and jumping still work naturally. Using setVelocity (not addVelocity)
+		// prevents velocity from accumulating across ticks.
+		Vec3d currentVel = client.player.getVelocity();
+		client.player.setVelocity(
+				dx / dist * speed,
+				currentVel.y,
+				dz / dist * speed
 		);
 	}
 }
